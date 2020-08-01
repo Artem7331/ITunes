@@ -6,6 +6,10 @@ export const videoPlayerInit = () => {
     const videoTimePassed = document.querySelector('.video-time__passed');
     const videoProgress = document.querySelector('.video-progress');
     const videoTimeTotal = document.querySelector('.video-time__total');
+    const videoVolume = document.querySelector('.video-volume');
+    const videoFullScreen = document.querySelector('.video-fullscreen');
+    const volumeDown = document.querySelector('.fa-volume-down');
+    // const volumeUp = document.querySelector('.fa-volume-up');
 
     const toggleIcon = () => {
         if (videoPlayer.paused){
@@ -58,10 +62,38 @@ export const videoPlayerInit = () => {
 
     });
 
-    videoProgress.addEventListener('change', () => {
+    videoProgress.addEventListener('input', () => {
         const value = videoProgress.value;
         const duration = videoPlayer.duration;
 
         videoPlayer.currentTime = (value * duration) / 100;
     });
+
+    videoFullScreen.addEventListener('click', () =>{
+        videoPlayer.requestFullscreen();
+    });
+
+    videoVolume.addEventListener('input', () => {
+        videoPlayer.volume = videoVolume.value / 100;
+        
+        // Дз с ползунком
+        if (videoPlayer.volume == 0){
+            volumeDown.classList.add('fa-volume-off');
+            volumeDown.classList.remove('fa-volume-down');
+            
+        } else {
+            volumeDown.classList.add('fa-volume-down');
+            volumeDown.classList.remove('fa-volume-off');
+        }
+    });
+
+    videoPlayer.volume = 0.5;
+
+    videoVolume.value = videoPlayer.volume * 100;
+
+    videoPlayerInit.stop = () => {
+        if (videoPlayer.paused) {
+            stopPlay();
+        }
+    };
 };
